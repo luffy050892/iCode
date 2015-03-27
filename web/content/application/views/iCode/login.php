@@ -6,7 +6,7 @@
 <meta name="author" content="">
 
 <title>iCode</title>
-
+<script src="<?php echo $base_url; ?>js/jquery.js"></script>
 <!-- Bootstrap Core CSS -->
 <link href="<?php echo $base_url; ?>css/bootstrap.min.css" rel="stylesheet">
 
@@ -26,7 +26,15 @@
     <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
 <![endif]-->
 </head>
-
+<script>
+$(document).ready(function(){
+	<?php
+	if($success){
+		echo "$('#password').focus();";
+	}
+	?>
+});
+</script>
 <body>
 	<div id="wrapper" style= "padding-left: 0px;">
 		<nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
@@ -45,9 +53,11 @@
 							<strong>Congratulations!</stong> Registration is successfull. You can now login
 						</div>
 						<?php } ?>
-						<div class="alert alert-warning">
-						<?php echo validation_errors(); ?>
-						</div>
+						<?php if(validation_errors()) { ?>
+							<div class="alert alert-warning">
+							<?php echo validation_errors(); ?>
+							</div>
+						<?php } ?>
 						<?php echo form_open('verifylogin'); ?>
 						<h1>Login</h1>
 							<div class="form-group">
@@ -56,7 +66,7 @@
 							</div>
 							<div class="form-group">
 								<label>Password</label>
-								<input class="form-control" name="password" type="password" required>
+								<input id="password" class="form-control" name="password" type="password" required>
 							</div>
 							<button type="submit" class="btn btn-default">Submit Button</button>
 							<button type="reset" class="btn btn-default">Reset Button</button>

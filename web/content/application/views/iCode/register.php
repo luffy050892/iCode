@@ -12,11 +12,13 @@
 <!-- Bootstrap Core CSS -->
 <link href="<?php echo $base_url; ?>css/bootstrap.min.css" rel="stylesheet">
 
+<script src="<?php echo $base_url; ?>js/bootstrap.js"></script>
 <!-- Custom CSS -->
 <link href="<?php echo $base_url; ?>css/sb-admin.css" rel="stylesheet">
 
 <!-- Morris Charts CSS -->
 <link href="<?php echo $base_url; ?>css/plugins/morris.css" rel="stylesheet">
+<link href="<?php echo $base_url; ?>css/icode.css" rel="stylesheet">
 
 <!-- Custom Fonts -->
 <link href="<?php echo $base_url; ?>font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
@@ -29,94 +31,109 @@
 <![endif]-->
 <script type="text/javascript">
 	
-  document.addEventListener("DOMContentLoaded", function() {
+	document.addEventListener("DOMContentLoaded", function() {
 
-    // JavaScript form validation
+	// JavaScript form validation
 
-    var checkPassword = function(str)
-    {
-      var re = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}$/;
-      return re.test(str);
-    };
+	var checkPassword = function(str) {
+		var re = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}$/;
+		return re.test(str);
+	};
 
-    var checkForm = function(e)
-    {
-   		
-      if(this.username.value == "") {
-        alert("Error: Username cannot be blank!");
-        this.username.focus();
-        e.preventDefault(); // equivalent to return false
-        return;
-      }
-      re = /^\w+$/;
-      if(!re.test(this.username.value)) {
-        alert("Error: Username must contain only letters, numbers and underscores!");
-        this.username.focus();
-        e.preventDefault();
-        return;
-      }
-      if(this.pwd1.value != "" && this.pwd1.value == this.pwd2.value) {
-        if(!checkPassword(this.pwd1.value)) {
-          alert("The password you have entered is not valid!");
-          this.pwd1.focus();
-          e.preventDefault();
-          return;
-        }
-      } else {
-        alert("Error: Please check that you've entered and confirmed your password!");
-        this.pwd1.focus();
-        e.preventDefault();
-        return;
-      }
-    };
+	var checkForm = function(e) {
+		if(this.username.value == "") {
+			alert("Error: Username cannot be blank!");
+			this.username.focus();
+			e.preventDefault(); // equivalent to return false
+			return;
+		}
+		
+		re = /^\w+$/;
+		if(!re.test(this.username.value)) {
+			alert("Error: Username must contain only letters, numbers and underscores!");
+			this.username.focus();
+			e.preventDefault();
+			return;
+		}
+		if(this.pwd1.value != "" && this.pwd1.value == this.pwd2.value) {
+			if(!checkPassword(this.pwd1.value)) {
+				alert("The password you have entered is not valid!");
+				this.pwd1.focus();
+				e.preventDefault();
+				return;
+			}
+		} else {
+			alert("Error: Please check that you've entered and confirmed your password!");
+			this.pwd1.focus();
+			e.preventDefault();
+			return;
+		}
+	};
 
-    var myForm = document.getElementById("myForm");
-    myForm.addEventListener("submit", checkForm, true);
+	var registrationForm = document.getElementById("registrationForm");
+	registrationForm.addEventListener("submit", checkForm, true);
 
-    // HTML5 form validation
+	// HTML5 form validation
 
-    var supports_input_validity = function()
-    {
-      var i = document.createElement("input");
-      return "setCustomValidity" in i;
-    }
+	var supports_input_validity = function() {
+		var i = document.createElement("input");
+		return "setCustomValidity" in i;
+	}
 
-    if(supports_input_validity()) {
+	if(supports_input_validity()) {
+		var usernameInput = document.getElementById("field_username");
+		//usernameInput.setCustomValidity(usernameInput.title);
 
-	
-      var usernameInput = document.getElementById("field_username");
-      //usernameInput.setCustomValidity(usernameInput.title);
+		var pwd1Input = document.getElementById("field_pwd1");
+		//pwd1Input.setCustomValidity(pwd1Input.title);
 
-      var pwd1Input = document.getElementById("field_pwd1");
-      //pwd1Input.setCustomValidity(pwd1Input.title);
+		var pwd2Input = document.getElementById("field_pwd2");
 
-      var pwd2Input = document.getElementById("field_pwd2");
+		// input key handlers
 
-      // input key handlers
+		usernameInput.addEventListener("keyup", function() {
+			usernameInput.setCustomValidity(this.validity.patternMismatch ? usernameInput.title : "");
+		}, false);
 
-      usernameInput.addEventListener("keyup", function() {
-        usernameInput.setCustomValidity(this.validity.patternMismatch ? usernameInput.title : "");
-      }, false);
+		pwd1Input.addEventListener("keyup", function() {
+			this.setCustomValidity(this.validity.patternMismatch ? pwd1Input.title : "");
+			if(this.checkValidity()) {
+				pwd2Input.pattern = this.value;
+				pwd2Input.setCustomValidity(pwd2Input.title);
+			} else {
+				pwd2Input.pattern = this.pattern;
+				pwd2Input.setCustomValidity("");
+			}
+		}, false);
 
-      pwd1Input.addEventListener("keyup", function() {
-        this.setCustomValidity(this.validity.patternMismatch ? pwd1Input.title : "");
-        if(this.checkValidity()) {
-          pwd2Input.pattern = this.value;
-          pwd2Input.setCustomValidity(pwd2Input.title);
-        } else {
-          pwd2Input.pattern = this.pattern;
-          pwd2Input.setCustomValidity("");
-        }
-      }, false);
+		pwd2Input.addEventListener("keyup", function() {
+			this.setCustomValidity(this.validity.patternMismatch ? pwd2Input.title : "");
+		}, false);
 
-      pwd2Input.addEventListener("keyup", function() {
-        this.setCustomValidity(this.validity.patternMismatch ? pwd2Input.title : "");
-      }, false);
+	}
 
-    }
-
-  }, false);
-
+	}, false);
+	$(document).ready(function(){
+		$("#registrationForm").submit(function(event){
+			$.ajax({
+				type: 'post',
+				url: 'checkUsername/'+$('#field_username').val(),
+				success: function (data) {
+					if(data == 1) {
+						$( ".error_message" ).show();
+						$('#field_username').focus();
+					} else {
+						$( ".error_message" ).hide();
+						document.forms["registrationForm"].submit();
+					}
+				}
+			});  
+			event.preventDefault(); 
+		});
+		$('#field_username').change(function(){
+			$('.error_message').hide();
+		});
+	});
 </script>
 </head>
 
@@ -124,7 +141,7 @@
 	<div id="wrapper" style= "padding-left: 0px;">
 		<nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
 			<div class="navbar-header">
-				<a class="navbar-brand" href="#">iCode</a>
+				<a class="navbar-brand" href="<?php echo $base_url; ?>users">iCode</a>
 			</div>
 		</nav>
 		<div id="page-wrapper">
@@ -134,11 +151,12 @@
 					</div>
 					<div class="col-lg-4">
 						 <?php echo validation_errors(); ?>
-						 <?php echo form_open('#',array('id' => 'myForm')); ?>
+						 <?php echo form_open('users/register',array('id' => 'registrationForm', 'name' => 'registrationForm')); ?>
 							<h1>Register</h1>
 							<div class="form-group">
 								<label>Username</label>
 								<input class="form-control" id="field_username" title="Username must not be blank and contain only letters, numbers and underscores." type="text" required pattern="\w+" name="username">
+								<span class='error_message'>Username not available</span>
 							</div>
 							<div class="form-group">
 								<label>Fullname</label>
@@ -147,10 +165,11 @@
 
 							<div class="form-group">
 								<label>Gender</label>
-								<select class="form-control" name="gender" required>
+								<select class="form-control" name="gender" required pattern=".{2,}" placeholder = "Selct Gender">
 									<option value="Male">Male</option>
 									<option value="Female">Female</option>
 									<option value="Undecided">Undecided</option>
+									<option value="" selected></option>
 								</select>
 							</div>
 							

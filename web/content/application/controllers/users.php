@@ -40,6 +40,7 @@ class Users extends CI_Controller {
 			$password = $this->input->post('pwd1');
 			$result = $this->user->register($username, $fullname, $email, $gender, $password);
 			$this->data['success'] = true;
+			$this->data['username'] = $username;
 			if($result==1){
 				$this->load->view('iCode/login', $this->data);
 			}
@@ -53,8 +54,7 @@ class Users extends CI_Controller {
 		$this->load->view('template', $this->data);
 	}
 	
-	public function checkUsername() {
-		$username = $this->input->post('username');
+	public function checkUsername($username) {
 		$result = $this->user->checkUsername($username);
 		echo $result;
 		return $result;

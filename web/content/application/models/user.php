@@ -39,7 +39,7 @@ Class User extends CI_Model {
     $this -> db -> limit(1);
 
     $query = $this -> db -> get();
-      return $query -> num_rows();
+    return $query -> num_rows();
     
   }
 

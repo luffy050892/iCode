@@ -28,7 +28,11 @@
     <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
     <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
 <![endif]-->
-
+<script>
+	$(window).load(function(){
+        $('#myModal').modal('show');
+    });
+</script>
 </head>
 
 <body>
@@ -238,6 +242,25 @@
 	<script>
 	  $('.codeEditor').ace({ theme: 'twilight', lang: 'php' })
 	</script>
+	<?php if($modal) { ?>
+	<!-- Modal -->
+	<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	  <div class="modal-dialog">
+		<div class="modal-content">
+		  <div class="modal-header">
+			<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+			<h4 class="modal-title" id="myModalLabel">Welcome to ICode.com</h4>
+		  </div>
+		  <div class="modal-body">
+			Congratulations! Registration successful.
+		  </div>
+		  <div class="modal-footer">
+			<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+		  </div>
+		</div>
+	  </div>
+	</div>
+	<?php } ?>
 </body>
 
 </html>
