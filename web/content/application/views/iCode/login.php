@@ -45,9 +45,11 @@
 							<strong>Congratulations!</stong> Registration is successfull. You can now login
 						</div>
 						<?php } ?>
+						<?php if(validation_errors()) { ?>
 						<div class="alert alert-warning">
 						<?php echo validation_errors(); ?>
 						</div>
+						<?php } ?>
 						<?php echo form_open('verifylogin'); ?>
 						<h1>Login</h1>
 							<div class="form-group">
