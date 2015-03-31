@@ -50,8 +50,18 @@ class Users extends CI_Controller {
 	}
 
 	function profile() { 
-		$this->data['content'] = $this->load->view('iCode/profile', $this->data, true);
-		$this->load->view('template', $this->data);
+		if($this->input->post('username')) {
+			$username = $this->input->post('username');
+			$fullname = $this->input->post('fullname');
+			$email = $this->input->post('email');
+			$gender = $this->input->post('gender');
+			$password = $this->input->post('pwd1');
+			$password = $this->input->post('about');
+			$result = $this->user->register($username, $fullname, $email, $gender, $password);
+		} else {
+			$this->data['content'] = $this->load->view('iCode/profile', $this->data, true);
+			$this->load->view('template', $this->data);
+		}	
 	}
 	
 	public function checkUsername($username) {

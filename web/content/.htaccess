@@ -18,9 +18,5 @@ ExpiresDefault "access 1 day"
 RewriteEngine on
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteCond %{REQUEST_FILENAME} !-f
-<<<<<<< Updated upstream
 RewriteRule ^(.*)$ /iCode/web/content/index.php/$1 [L]
-=======
-RewriteRule ^(.*)$ /~restie/iCode/web/content/index.php/$1 [L]
->>>>>>> Stashed changes
 RewriteCond $1 !^(index\.php|includes|theme|media|robots\.txt|fonts)

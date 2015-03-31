@@ -165,10 +165,9 @@
 
 							<div class="form-group">
 								<label>Gender</label>
-								<select class="form-control" name="gender" required pattern=".{2,}" placeholder = "Selct Gender">
+								<select class="form-control" name="gender" required pattern=".{2,}" placeholder = "Select Gender">
 									<option value="Male">Male</option>
 									<option value="Female">Female</option>
-									<option value="Undecided">Undecided</option>
 									<option value="" selected></option>
 								</select>
 							</div>
